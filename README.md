@@ -2,7 +2,7 @@
 <p>Burc yorumları ve bu burcların 17 farklı etiket ile özellikleri. Aşk,kariyer vb…</p>
 
 
-Burç Api Özellikleri: 👇<br>
+Burç Api Özellikleri: 👇👇👇<br>
 1-)Günlük, haftalık, aylık ve yıllık olarak burc yorumları<br>
 2-)Burçların gezegenleri, mottoları ve elementi<br>
 3-)17 Farklı etiket ile aşk, kariyer vb. gibi yorumlar<br>
