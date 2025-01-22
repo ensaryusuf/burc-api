@@ -120,39 +120,44 @@ app.get("/gets/:burc/:ozellik", async (req, res) => {
     var ozellik = req.params.ozellik;
     var datas = [];
 
-    await fetch(API_URI_3.replace('{0}', slugify(burc)).replace('{1}', slugify(ozellik)))
-        .then(response => response.text())
-        .then(body => {
-            console.log("Fetched HTML:", body); // Debug için
-            const $ = cheerio.load(body)
-            $('.col-md-12.col-lg-8').each(function (i, e) {
-                datas[i] = {
-                    Burc: burc.charAt(0).toUpperCase() + burc.slice(1),
-                    Ozellik: ozellik.charAt(0).toUpperCase() + ozellik.slice(1),
-                    Baslik: $(this)
-                        .find('div h2')
-                        .text().match(/(.*)\"(.*)\.(.*)/)[2],
-                    Yorum: $(this)
-                        .find('.col-md-17 .news-content.readingTime p')
-                        .map(function() {
-                            return $(this).text();
-                        })
-                        .get()
-                        .join(' '),
-                    Unluler: $(this)
-                        .find('div div ul li')
-                        .text(),
-
-                }
-
-            })
-
-        })
+    try {
+        const response = await fetch(API_URI_3.replace('{0}', slugify(burc)).replace('{1}', slugify(ozellik)));
+        const body = await response.text();
+        
+        console.log("URL:", API_URI_3.replace('{0}', slugify(burc)).replace('{1}', slugify(ozellik)));
+        console.log("Status:", response.status);
+        console.log("Body length:", body.length);
+        
+        const $ = cheerio.load(body);
+        
+        // Test selector'ın bir şey bulup bulmadığını kontrol edelim
+        const testElement = $('.col-md-12.col-lg-8');
+        console.log("Found elements:", testElement.length);
+        
+        $('.col-md-12.col-lg-8').each(function (i, e) {
+            datas[i] = {
+                Burc: burc.charAt(0).toUpperCase() + burc.slice(1),
+                Ozellik: ozellik.charAt(0).toUpperCase() + ozellik.slice(1),
+                Yorum: $(this)
+                    .find('.news-content.readingTime p')
+                    .map(function() {
+                        return $(this).text();
+                    })
+                    .get()
+                    .join(' ')
+            }
+        });
+        
+        console.log("Parsed data:", datas);
+        
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ error: error.message });
+    }
 
     res.send(datas);
+});
 
-
-})
 
 
 const port = process.env.PORT || 5000;
