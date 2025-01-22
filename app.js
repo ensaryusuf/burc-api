@@ -121,9 +121,9 @@ app.get("/gets/:burc/:ozellik", async (req, res) => {
     var datas = [];
 
     await fetch(API_URI_3.replace('{0}', slugify(burc)).replace('{1}', slugify(ozellik)))
-
         .then(response => response.text())
         .then(body => {
+            console.log("Fetched HTML:", body); // Debug için
             const $ = cheerio.load(body)
             $('.col-md-12.col-lg-8').each(function (i, e) {
                 datas[i] = {
@@ -133,7 +133,7 @@ app.get("/gets/:burc/:ozellik", async (req, res) => {
                         .find('div h2')
                         .text().match(/(.*)\"(.*)\.(.*)/)[2],
                     Yorum: $(this)
-                        .find('.news-content.readingTime > p')
+                        .find('.col-md-17 .news-content.readingTime p')
                         .map(function() {
                             return $(this).text();
                         })
