@@ -133,7 +133,7 @@ app.get("/gets/:burc/:ozellik", async (req, res) => {
                         .find('div h2')
                         .text().match(/(.*)\"(.*)\.(.*)/)[2],
                     Yorum: $(this)
-                        .find('div div p')
+                        .find('div[class="page"] div.row div.col-xl-17.col-lg-16.news-left-content div.news-content.readingTime p')
                         .text(),
                     Unluler: $(this)
                         .find('div div ul li')
